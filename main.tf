@@ -12,3 +12,18 @@ resource "aws_organizations_organization" "org" {
   ]
   feature_set = "ALL"
 }
+
+resource "aws_kms_key" "master-key" {
+  description         = "${local.env.name}-master-key"
+  enable_key_rotation = true
+  is_enabled          = true
+}
+
+resource "aws_kms_alias" "master-key-alias" {
+  name          = "alias/${local.env.name}"
+  target_key_id = aws_kms_key.master-key.key_id
+}
+
+module "public" {
+  source = "./accounts/public"
+}
