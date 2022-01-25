@@ -1,6 +1,18 @@
 locals {
   env          = yamldecode(file("env.yml"))
   backend_path = "terraform-backend-${run_cmd("aws", "sts", "get-caller-identity", "--profile", "${local.env.profile}", "--query", "Account", "--output", "text")}-${local.env.name}"
+  accounts     = jsondecode(run_cmd("aws", "organizations", "list-accounts", "--profile", "${local.env.profile}", "--query", "Accounts"))
+  providers = join("\n\n", [for account in local.accounts : <<PROVIDER
+provider "aws" {
+  alias   = "${replace(account.Name, ".", "")}"
+  profile = "${local.env.profile}"
+  region  = "${local.env.region}"
+  assume_role {
+    role_arn = "arn:aws:iam::${account.Id}:role/OrganizationAccountAccessRole"
+  }
+}
+PROVIDER
+  ])
 }
 remote_state {
   backend = "s3"
@@ -21,7 +33,7 @@ remote_state {
 }
 
 generate "provider" {
-  path              = "provider_override.tf"
+  path              = "provider.tf"
   if_exists         = "overwrite"
   disable_signature = true
   contents          = <<EOF
@@ -29,5 +41,7 @@ provider "aws" {
   profile = "${local.env.profile}"
   region  = "${local.env.region}"
 }
+
+${local.providers}
 EOF
 }

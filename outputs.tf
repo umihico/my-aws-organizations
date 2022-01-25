@@ -1,4 +1,4 @@
-output "public-accounts" {
+output "public" {
   value = nonsensitive(jsondecode(jsonencode(module.public)))
 }
 output "main-org" {

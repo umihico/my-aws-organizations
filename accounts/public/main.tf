@@ -7,12 +7,21 @@ PAGER="" aws kms encrypt \
  --output text \
  --query CiphertextBlob
 
-STEP 2. Add account name and encrypted value into locals
+STEP 2. Add account name and encrypted value into locals and run terraform apply
 
-STEP 3. terraform apply
+STEP 3. Check your email
 
-STEP 4. Check your email
+STEP 4. Add iam module and run terraform apply if you need iam users
 */
+
+terraform {
+  required_providers {
+    aws = {
+      source                = "hashicorp/aws"
+      configuration_aliases = [aws.circleci]
+    }
+  }
+}
 
 locals {
   emails = {
@@ -34,4 +43,10 @@ resource "aws_organizations_account" "accounts" {
   for_each = local.emails
   name     = each.key
   email    = data.aws_kms_secrets.emails.plaintext[each.key]
+}
+
+module "circleci" {
+  source    = "../../iam"
+  providers = { aws = aws.circleci }
+  users     = ["circleci-projects"]
 }
