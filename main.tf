@@ -25,7 +25,7 @@ resource "aws_kms_alias" "master-key-alias" {
 }
 
 module "public" {
-  source = "./accounts/public"
+  source = "./accounts"
   providers = {
     aws          = aws,
     aws.circleci = aws.circleci,

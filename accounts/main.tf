@@ -61,7 +61,7 @@ resource "aws_organizations_account" "accounts" {
 }
 
 module "circleci" {
-  source    = "../../iam"
+  source    = "../iam"
   providers = { aws = aws.circleci }
   users = {
     "circleci-projects" = data.aws_kms_secrets.users_custom_polices.plaintext["circleci-projects"]
