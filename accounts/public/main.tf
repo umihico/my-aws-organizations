@@ -27,11 +27,24 @@ locals {
   emails = {
     "circleci" : "AQICAHjyt8yghuRp22llYfGQPF7gNyThuvomrTWRxYFkYvNYTAEXpluDPRHcqv0aLxa51BO3AAAAdzB1BgkqhkiG9w0BBwagaDBmAgEAMGEGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMcAiszaP9pndCZRGIAgEQgDTDy2k7/juQE0nufVzKRCupM902EVM9br1Uj4nIF25vt8WEw1cMWeA81AZIF1YR3ZDXYMwa"
   }
+  users_custom_polices = {
+    "circleci-projects" = "AQICAHjyt8yghuRp22llYfGQPF7gNyThuvomrTWRxYFkYvNYTAGCPeRhOSMB8udq1uO0ksr3AAAAijCBhwYJKoZIhvcNAQcGoHoweAIBADBzBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDLftr33GNPRRfauoDwIBEIBGuwxqhns3/fQcMiZ9thChVkbynRj7boocipE5VgbiosOR7meEMCDfqbmP+7QwswEO/9E5h2Jyq9HKfbkhOQEUXtM6SeBKDw=="
+  }
 }
 
 data "aws_kms_secrets" "emails" {
   dynamic "secret" {
     for_each = local.emails
+    content {
+      name    = secret.key
+      payload = secret.value
+    }
+  }
+}
+
+data "aws_kms_secrets" "users_custom_polices" {
+  dynamic "secret" {
+    for_each = local.users_custom_polices
     content {
       name    = secret.key
       payload = secret.value
@@ -48,5 +61,7 @@ resource "aws_organizations_account" "accounts" {
 module "circleci" {
   source    = "../../iam"
   providers = { aws = aws.circleci }
-  users     = ["circleci-projects"]
+  users = {
+    "circleci-projects" = data.aws_kms_secrets.users_custom_polices.plaintext["circleci-projects"]
+  }
 }

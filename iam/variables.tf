@@ -1,3 +1,3 @@
 variable "users" {
-  type = list(string)
+  type = map(string)
 }
