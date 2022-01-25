@@ -9,9 +9,11 @@ PAGER="" aws kms encrypt \
 
 STEP 2. Add account name and encrypted value into locals and run terraform apply
 
-STEP 3. Check your email
+STEP 3. Check your email and set MFA to your root account
 
 STEP 4. Add iam module and run terraform apply if you need iam users
+
+STEP 5. aws iam create-access-key --user-name Bob --profile BobAccount
 */
 
 terraform {
