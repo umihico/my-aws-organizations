@@ -28,6 +28,7 @@ terraform {
 locals {
   emails = {
     "circleci" : "AQICAHjyt8yghuRp22llYfGQPF7gNyThuvomrTWRxYFkYvNYTAEXpluDPRHcqv0aLxa51BO3AAAAdzB1BgkqhkiG9w0BBwagaDBmAgEAMGEGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMcAiszaP9pndCZRGIAgEQgDTDy2k7/juQE0nufVzKRCupM902EVM9br1Uj4nIF25vt8WEw1cMWeA81AZIF1YR3ZDXYMwa"
+    "bastion" : "AQICAHjyt8yghuRp22llYfGQPF7gNyThuvomrTWRxYFkYvNYTAERux8LdqXPROPJRg8xp+otAAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMutFKl6wqsGh3/Ug5AgEQgDNFUxiB35KoNTh4GG2yAl4SiPIfftHnZon4i9dh87K2vNXcnBYeJL1CuDkBN1lB/WKbz7g="
   }
   users_custom_polices = {
     "circleci-projects" = "AQICAHjyt8yghuRp22llYfGQPF7gNyThuvomrTWRxYFkYvNYTAGCPeRhOSMB8udq1uO0ksr3AAAAijCBhwYJKoZIhvcNAQcGoHoweAIBADBzBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDLftr33GNPRRfauoDwIBEIBGuwxqhns3/fQcMiZ9thChVkbynRj7boocipE5VgbiosOR7meEMCDfqbmP+7QwswEO/9E5h2Jyq9HKfbkhOQEUXtM6SeBKDw=="
