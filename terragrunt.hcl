@@ -1,12 +1,11 @@
 locals {
   env          = yamldecode(file("env.yml"))
-  backend_path = "terraform-backend-${run_cmd("aws", "sts", "get-caller-identity", "--profile", "${local.env.profile}", "--query", "Account", "--output", "text")}-${local.env.name}"
-  accounts     = jsondecode(run_cmd("aws", "organizations", "list-accounts", "--profile", "${local.env.profile}", "--query", "Accounts"))
+  backend_path = "terraform-states-${get_aws_account_id()}-organizations"
+  accounts     = jsondecode(run_cmd("aws", "organizations", "list-accounts", "--query", "Accounts"))
   providers = join("\n\n", [for account in local.accounts : <<PROVIDER
 provider "aws" {
+  region  = "ap-northeast-1"
   alias   = "${replace(account.Name, ".", "")}"
-  profile = "${local.env.profile}"
-  region  = "${local.env.region}"
   assume_role {
     role_arn = "arn:aws:iam::${account.Id}:role/OrganizationAccountAccessRole"
   }
@@ -22,8 +21,7 @@ remote_state {
     disable_signature = true
   }
   config = {
-    profile              = local.env.profile
-    region               = local.env.region
+    region               = "ap-northeast-1"
     bucket               = local.backend_path
     key                  = "${path_relative_to_include()}/terraform.tfstate"
     encrypt              = true
@@ -38,8 +36,7 @@ generate "provider" {
   disable_signature = true
   contents          = <<EOF
 provider "aws" {
-  profile = "${local.env.profile}"
-  region  = "${local.env.region}"
+  region  = "ap-northeast-1"
 }
 
 ${local.providers}
