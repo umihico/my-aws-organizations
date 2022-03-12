@@ -16,7 +16,7 @@ resource "aws_organizations_organization" "org" {
 module "public" {
   source = "./accounts"
   providers = {
-    aws          = aws,
-    aws.circleci = aws.circleci,
+    aws                 = aws,
+    aws.public-circleci = aws.public-circleci,
   }
 }

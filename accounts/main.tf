@@ -20,18 +20,18 @@ terraform {
   required_providers {
     aws = {
       source                = "hashicorp/aws"
-      configuration_aliases = [aws.circleci]
+      configuration_aliases = [aws.public-circleci]
     }
   }
 }
 
 locals {
   emails = {
-    "circleci" : "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgE3LEXiRrZy/kdrckItk1A0AAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM+XHQsA5fXLPJrJzHAgEQgDMfAIMhfO4ht/BWY1vetPcQTYz9sbdjvhkHcm6za1W/U3Bm7ZqBCk5Py5IFNIc6ZKQiaqc="
+    "public-circleci" : "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgE3LEXiRrZy/kdrckItk1A0AAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM+XHQsA5fXLPJrJzHAgEQgDMfAIMhfO4ht/BWY1vetPcQTYz9sbdjvhkHcm6za1W/U3Bm7ZqBCk5Py5IFNIc6ZKQiaqc="
     "bastion" : "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgE6lxBZqEiKT/GjBKxmE4f5AAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMxhIpinBtC7+7S0QnAgEQgDOJhVdQWKACoq0KLLZVouTvVhxZnnOoaMXuHWsDkndwciVK7pCznh2cwGjn9Cd7pxVuIBA="
   }
   users_custom_polices = {
-    "circleci-projects" = "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgH6VYGA6RnFPGPTDGmh+fc2AAAAijCBhwYJKoZIhvcNAQcGoHoweAIBADBzBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDE8Rf7N7U9JRkTnjuAIBEIBG2DB2dofvmEaBgu855mF3yqPt8X+Nd/3IQb3BMFHPS6wtl1tuT92t+2xiWMln1eI71qhGnm3F1+vnsXeWIbbwEgLUU81JtA=="
+    "public-circleci" = "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgH6VYGA6RnFPGPTDGmh+fc2AAAAijCBhwYJKoZIhvcNAQcGoHoweAIBADBzBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDE8Rf7N7U9JRkTnjuAIBEIBG2DB2dofvmEaBgu855mF3yqPt8X+Nd/3IQb3BMFHPS6wtl1tuT92t+2xiWMln1eI71qhGnm3F1+vnsXeWIbbwEgLUU81JtA=="
   }
 }
 
@@ -63,8 +63,8 @@ resource "aws_organizations_account" "accounts" {
 
 module "circleci" {
   source    = "../iam"
-  providers = { aws = aws.circleci }
+  providers = { aws = aws.public-circleci }
   users = {
-    "circleci-projects" = data.aws_kms_secrets.users_custom_polices.plaintext["circleci-projects"]
+    "public-circleci" = data.aws_kms_secrets.users_custom_polices.plaintext["public-circleci"]
   }
 }
