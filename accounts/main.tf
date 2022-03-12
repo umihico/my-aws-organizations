@@ -33,6 +33,32 @@ locals {
   users_custom_polices = {
     "public-circleci" = "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgH6VYGA6RnFPGPTDGmh+fc2AAAAijCBhwYJKoZIhvcNAQcGoHoweAIBADBzBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDE8Rf7N7U9JRkTnjuAIBEIBG2DB2dofvmEaBgu855mF3yqPt8X+Nd/3IQb3BMFHPS6wtl1tuT92t+2xiWMln1eI71qhGnm3F1+vnsXeWIbbwEgLUU81JtA=="
   }
+
+  # https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html
+  shared_kms_policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "AllowUseOfKeyInAccount${data.aws_caller_identity.self.account_id}",
+          "Effect" : "Allow",
+          "Action" : [
+            "kms:Encrypt",
+            "kms:Decrypt",
+            "kms:ReEncrypt*",
+            "kms:GenerateDataKey*",
+            "kms:DescribeKey"
+          ],
+          "Resource" : "${data.aws_kms_key.shared_key.arn}",
+        }
+      ]
+  })
+}
+
+data "aws_caller_identity" "self" {}
+
+data "aws_kms_key" "shared_key" {
+  key_id = "alias/shared-key"
 }
 
 data "aws_kms_secrets" "emails" {
@@ -67,4 +93,14 @@ module "circleci" {
   users = {
     "public-circleci" = data.aws_kms_secrets.users_custom_polices.plaintext["public-circleci"]
   }
+}
+
+module "circleci-shared-kms" {
+  source            = "../iam/shared-kms"
+  providers         = { aws = aws.public-circleci }
+  users             = ["public-circleci"]
+  shared_kms_policy = local.shared_kms_policy
+  depends_on = [
+    module.circleci
+  ]
 }
