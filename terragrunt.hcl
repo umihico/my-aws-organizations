@@ -48,6 +48,7 @@ inputs = {
       "public-circleci" = get_env("AWS_ACCOUNTS_EMAIL_PUBLIC_CIRCLECI")
       "bastion"         = get_env("AWS_ACCOUNTS_EMAIL_BASTION")
       "blog"            = get_env("AWS_ACCOUNTS_EMAIL_BLOG")
+      "kabu"            = get_env("AWS_ACCOUNTS_EMAIL_KABU")
     }
   }
 }
