@@ -1,0 +1,16 @@
+AWS_ACCOUNTS_EMAIL_KABU: ENC[AES256_GCM,data:JAxA5GY3swYBTwnYmLEtd58W0btGE3A=,iv:uHWC2m1y6vj4WxqIEvuuEJ56KUFEtR5ZPWfYRyE3q9I=,tag:8Kigo5Iv0gs2bdBEHVTlKQ==,type:str]
+sops:
+  kms:
+    - arn: '******'
+      created_at: "2023-02-26T10:50:14Z"
+      enc: AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgEpQNLwWIF+/du4NqQME4EIAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMymTN31e+97PL74GuAgEQgDsNeg1I44kYWyzlS3Pm+uEJa6jU/e6tNOJsVQZrDUY9N4upk4x5e7PLdm6RzoZDeIyrPWzE3/sUv9IF1w==
+      aws_profile: ""
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age: []
+  lastmodified: "2023-02-26T10:50:24Z"
+  mac: ENC[AES256_GCM,data:moEPQruWVIq+cUGc9iiC4KTblw5Dr7NVZ/XlCjtU+LOIz8JDTauPXrnnYy5YNYar33SnaTVlNH5SrzH+qWBdUpjol1Py0hA1q4kbedR/ODWe/aHMrg1kchEoYSNBm3WS0+P4rLKDYXJB+yyKFQH+pqOzrTsiWG8qgNCBPdiO8q0=,iv:jP0pgEzj5R5W9I35xSAdXjlypuzWUFwa9V6IbY09wfE=,tag:Y4wUVHGtBINQu55Vs9pPTw==,type:str]
+  pgp: []
+  unencrypted_suffix: _unencrypted
+  version: 3.7.3
