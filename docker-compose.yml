@@ -1,0 +1,10 @@
+version: "3"
+services:
+  worker:
+    build: .
+    environment:
+      SOPS_KMS_ARN: ${SOPS_KMS_ARN}
+    volumes:
+      - .:/app
+      - ~/.aws:/root/.aws
+    working_dir: /app
