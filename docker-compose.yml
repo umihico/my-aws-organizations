@@ -3,8 +3,12 @@ services:
   worker:
     build: .
     environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
       SOPS_KMS_ARN: ${SOPS_KMS_ARN}
+    env_file:
+      - .env
     volumes:
       - .:/app
-      - ~/.aws:/root/.aws
     working_dir: /app
