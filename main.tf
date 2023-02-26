@@ -1,5 +1,5 @@
 locals {
-  env = yamldecode(file("env.yml"))
+  vars = jsondecode(var.vars)
 }
 
 resource "aws_organizations_organization" "org" {
@@ -15,6 +15,7 @@ resource "aws_organizations_organization" "org" {
 
 module "public" {
   source = "./accounts"
+  vars   = local.vars
   providers = {
     aws                 = aws,
     aws.public-circleci = aws.public-circleci,

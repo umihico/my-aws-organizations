@@ -1,5 +1,4 @@
 locals {
-  env          = yamldecode(file("env.yml"))
   backend_path = "terraform-states-${get_aws_account_id()}-organizations"
   accounts     = jsondecode(run_cmd("aws", "organizations", "list-accounts", "--query", "Accounts"))
   providers = join("\n\n", [for account in local.accounts : <<PROVIDER
@@ -41,4 +40,15 @@ provider "aws" {
 
 ${local.providers}
 EOF
+}
+
+inputs = {
+  vars = {
+    emails = {
+      "public-circleci" = get_env("AWS_ACCOUNTS_EMAIL_PUBLIC_CIRCLECI")
+      "bastion"         = get_env("AWS_ACCOUNTS_EMAIL_BASTION")
+      "blog"            = get_env("AWS_ACCOUNTS_EMAIL_BLOG")
+      "kabu"            = get_env("AWS_ACCOUNTS_EMAIL_KABU")
+    }
+  }
 }

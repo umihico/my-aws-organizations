@@ -26,11 +26,6 @@ terraform {
 }
 
 locals {
-  emails = {
-    "public-circleci" : "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgE3LEXiRrZy/kdrckItk1A0AAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM+XHQsA5fXLPJrJzHAgEQgDMfAIMhfO4ht/BWY1vetPcQTYz9sbdjvhkHcm6za1W/U3Bm7ZqBCk5Py5IFNIc6ZKQiaqc="
-    "bastion" : "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgE6lxBZqEiKT/GjBKxmE4f5AAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMxhIpinBtC7+7S0QnAgEQgDOJhVdQWKACoq0KLLZVouTvVhxZnnOoaMXuHWsDkndwciVK7pCznh2cwGjn9Cd7pxVuIBA="
-    "blog" : "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgGTDv0RPapLgKfWaHvr1+BaAAAAczBxBgkqhkiG9w0BBwagZDBiAgEAMF0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMVe3RgU5DkADm8lyhAgEQgDBItwKsL9E8P9D9CFl7aL2O36YybQe4I7RHnPWCI4iY+1pmd6L872EgkTTtuAzreaY="
-  }
   users_custom_polices = {
     "public-circleci" = "AQICAHhknPcMN2mPQjlgkKH9EhrUk79o+4j1nUtJMmNPXkAKWgH6VYGA6RnFPGPTDGmh+fc2AAAAijCBhwYJKoZIhvcNAQcGoHoweAIBADBzBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDE8Rf7N7U9JRkTnjuAIBEIBG2DB2dofvmEaBgu855mF3yqPt8X+Nd/3IQb3BMFHPS6wtl1tuT92t+2xiWMln1eI71qhGnm3F1+vnsXeWIbbwEgLUU81JtA=="
   }
@@ -62,16 +57,6 @@ data "aws_kms_key" "shared_key" {
   key_id = "alias/shared-key"
 }
 
-data "aws_kms_secrets" "emails" {
-  dynamic "secret" {
-    for_each = local.emails
-    content {
-      name    = secret.key
-      payload = secret.value
-    }
-  }
-}
-
 data "aws_kms_secrets" "users_custom_polices" {
   dynamic "secret" {
     for_each = local.users_custom_polices
@@ -83,9 +68,9 @@ data "aws_kms_secrets" "users_custom_polices" {
 }
 
 resource "aws_organizations_account" "accounts" {
-  for_each = local.emails
+  for_each = var.vars.emails
   name     = each.key
-  email    = data.aws_kms_secrets.emails.plaintext[each.key]
+  email    = each.value
 }
 
 module "circleci" {
