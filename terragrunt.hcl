@@ -49,6 +49,7 @@ inputs = {
       "bastion"         = get_env("AWS_ACCOUNTS_EMAIL_BASTION")
       "blog"            = get_env("AWS_ACCOUNTS_EMAIL_BLOG")
       "kabu"            = get_env("AWS_ACCOUNTS_EMAIL_KABU")
+      "cristina"        = get_env("AWS_ACCOUNTS_EMAIL_CRISTINA")
     }
   }
 }
